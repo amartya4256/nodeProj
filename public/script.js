@@ -1,7 +1,7 @@
 const url = "todo4256.herokuapp.com";
 
 async function getData(){
-    let res = await fetch(url +"/todo");
+    let res = await fetch("/todo");
     let data = await res.json();
     addToTable(data);
 }
@@ -88,7 +88,7 @@ async function addTask(){
 
 
     if(data.title != "" && data.due != "" && data.priority != ""){
-        let res = await fetch(url +"/todo",
+        let res = await fetch("/todo",
         {
             method : 'POST',
             headers: {
@@ -130,7 +130,7 @@ async function getNotes(id, rowData){
             input.id = id + "_input";
           }
     }
-    xhr.open("GET", url +"/todo/" + id + "/notes");
+    xhr.open("GET", "/todo/" + id + "/notes");
     xhr.send();
 }
 
@@ -140,7 +140,7 @@ async function addNote(input, id){
             note : input.value,
             TodoId : id
         };
-        let res = await fetch(url +"/todo/" + id + "/notes",
+        let res = await fetch("/todo/" + id + "/notes",
             {
                 method : 'POST',
                 headers: {

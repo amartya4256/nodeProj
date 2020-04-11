@@ -29,7 +29,6 @@ function addToTable(data){
     row.appendChild(newElement('th', 'Status'));
     row.appendChild(newElement('th', 'Priority'));
 
-    console.log(data);
     if(data.length == 0){
         let row = newElement('tr', null);
         table.appendChild(row);
@@ -49,6 +48,15 @@ function addToTable(data){
             row.appendChild(newElement('td', item.due));
             row.appendChild(newElement('td', item.status));
             row.appendChild(newElement('td', item.priority));
+            let rowNote = newElement('tr', null);
+
+            table.appendChild(rowNote);
+            rowNote.className = 'notes';
+            rowData = document.createElement('td');
+            rowNote.appendChild(rowData);
+            getNotes(item.id, rowData);
+            rowData.colSpan = 6;
+            
         }
     }
     
@@ -72,7 +80,6 @@ async function addTask(){
         note : note.value
     };
 
-    console.log(data);
 
     if(data.title != "" && data.due != "" && data.priority != ""){
         let res = await fetch("http://localhost:8080/todo",
@@ -94,4 +101,51 @@ async function addTask(){
     
 }
 
+async function getNotes(id, rowData){
+    var xhr = new XMLHttpRequest;
+    xhr.onreadystatechange = function(){
+        if (xhr.readyState === 4 && xhr.status == 200) {
+            let data = JSON.parse(this.responseText);
+            formattedData = '';
+            for(let note of data){
+                formattedData += note.note + `<br/>`;
+            }
+            rowData.innerHTML = formattedData;
+            let input = newElement('input', null);
+            let btn = newElement('input', null);
+            rowData.appendChild(input);
+            rowData.appendChild(btn);
+            input.type = 'text';
+            btn.type = 'button';
+            btn.value = 'Add Note';
+            btn.onclick = function(){
+                addNote(input, id);
+            }
+            input.id = id + "_input";
+          }
+    }
+    xhr.open("GET", "http://localhost:8080/todo/" + id + "/notes");
+    xhr.send();
+}
+
+async function addNote(input, id){
+    if(input.value != ""){
+        data = {
+            note : input.value,
+            TodoId : id
+        };
+        let res = await fetch("http://localhost:8080/todo/" + id + "/notes",
+            {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+                });
+        let respData = res.body;
+        getData();
+    }
+}
+
 submit.onclick = addTask;
+

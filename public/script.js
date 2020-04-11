@@ -12,6 +12,7 @@ const due = document.querySelector('#due');
 const priority = document.querySelector('#priority');
 const note = document.querySelector('#note');
 const submit = document.querySelector("#btn");
+const sortBy = document.querySelector("#sort");
 
 const today = new Date();
 const tomorrow = new Date(today);
@@ -39,10 +40,12 @@ function addToTable(data){
         data.style.color = "gray";
     }
     else{
+        data = sortData(data, sortBy.value);
+        let indexVal = 1;
         for(item of data){
             let row = newElement('tr', null);
             table.appendChild(row);
-            row.appendChild(newElement('td', item.id));
+            row.appendChild(newElement('td', indexVal));
             row.appendChild(newElement('td', item.title));
             row.appendChild(newElement('td', item.description));
             row.appendChild(newElement('td', item.due));
@@ -56,6 +59,7 @@ function addToTable(data){
             rowNote.appendChild(rowData);
             getNotes(item.id, rowData);
             rowData.colSpan = 6;
+            indexVal++;
             
         }
     }
@@ -147,5 +151,71 @@ async function addNote(input, id){
     }
 }
 
+function sortData(data, sortValue){
+    switch(sortValue){
+        case "due" : return sortByDueDate(data);
+
+        case "priority" : return sortByPriority(data);
+
+        case "status" : return sortByStatus(data);
+
+        default : return data;
+    }
+}
+
+function sortByDueDate(data){
+    console.log(data);
+    data.sort(function(o1,o2){
+        if (o1.due < o2.due)    return -1;
+        else if(o1.due > o2.due) return  1;
+        else                      return  0;
+      });
+      return data;
+}
+
+function sortByPriority(data){
+    console.log(data);
+    let dummyData = data;
+    for(let item of dummyData){
+        if(item.priority == "medium"){
+            item.priority = 2;
+        }
+        else if(item.priority == "high"){
+            item.priority = 1;
+        }
+        else{
+            item.priority = 3;
+        }
+    }
+    dummyData.sort(function(o1,o2){
+        if (o1.priority < o2.priority)      return -1;
+        else if(o1.priority > o2.priority)  return  1;
+        else                                return  0;
+      });
+      for(let item of dummyData){
+        if(item.priority == 2){
+            item.priority = "medium";
+        }
+        else if(item.priority == 1){
+            item.priority = "high";
+        }
+        else{
+            item.priority = "low";
+        }
+    }
+    return dummyData;
+}
+
+function sortByStatus(data){
+    console.log(data);
+    data.sort(function(o1,o2){
+        if (o1.status == true && o2.status == false)    return -1;
+        else                                            return  1;
+      });
+      return data;
+}
+
 submit.onclick = addTask;
+
+sortBy.onchange = getData;
 

@@ -31,8 +31,19 @@
     <label>Note : </label>
     <input type = "text" id = "note" style="width : 70%">
     <input type="button" value = "Add Task" id = "btn">
-    
     <p id = 'err'></p>
+    <br/>
+
+    <center>
+    <label>Sort by:<span style = "color : red">*</span> </label>
+    <select id="sort">
+        <option value="due">Due date</option>
+        <option value="priority">Priority</option>
+        <option value="status">Status</option>
+    </select>
+    </center>
+    
+
     <br/>
     
     <table id = "table"><table>

@@ -108,7 +108,7 @@ async function addTask(){
 }
 
 async function getNotes(id, rowData){
-    var xhr = new XMLhttpRequest;
+    var xhr = new XMLHttpRequest;
     xhr.onreadystatechange = function(){
         if (xhr.readyState === 4 && xhr.status == 200) {
             let data = JSON.parse(this.responseText);

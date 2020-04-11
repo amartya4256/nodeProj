@@ -1,4 +1,4 @@
-const url = "localhost:5000";
+const url = "todo4256.herokuapp.com/";
 
 async function getData(){
     let res = await fetch("http://" + url +"/todo");

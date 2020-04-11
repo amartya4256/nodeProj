@@ -12,9 +12,10 @@ app.use(express.json());
 
 app.use('/', express.static(__dirname + '/public'));
 
+app.set( 'port', ( process.env.PORT || 5000 ));
 
 db.sync().then(
-    () => app.listen(8080)
+    () => app.listen(app.get( 'port' ))
     ).catch(
       (err) => console.error(err)
     );

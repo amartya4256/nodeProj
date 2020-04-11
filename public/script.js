@@ -1,5 +1,7 @@
+const url = "localhost:5000";
+
 async function getData(){
-    let res = await fetch("http://localhost:8080/todo");
+    let res = await fetch("http://" + url +"/todo");
     let data = await res.json();
     addToTable(data);
 }
@@ -86,7 +88,7 @@ async function addTask(){
 
 
     if(data.title != "" && data.due != "" && data.priority != ""){
-        let res = await fetch("http://localhost:8080/todo",
+        let res = await fetch("http://" + url +"/todo",
         {
             method : 'POST',
             headers: {
@@ -128,7 +130,7 @@ async function getNotes(id, rowData){
             input.id = id + "_input";
           }
     }
-    xhr.open("GET", "http://localhost:8080/todo/" + id + "/notes");
+    xhr.open("GET", "http://" + url +"/todo/" + id + "/notes");
     xhr.send();
 }
 
@@ -138,7 +140,7 @@ async function addNote(input, id){
             note : input.value,
             TodoId : id
         };
-        let res = await fetch("http://localhost:8080/todo/" + id + "/notes",
+        let res = await fetch("http://" + url +"/todo/" + id + "/notes",
             {
                 method : 'POST',
                 headers: {

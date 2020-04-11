@@ -39,6 +39,19 @@ app.get('/todo/', (req, res) => {
 
 app.post('/todo', (req, res) => {
     let data = req.body;
-    Todos.create(data).then(() => res.send(""));
+    Todos.create(data).then(
+        (retVal) => {
+            console.log(retVal);
+            if(data.note != ''){
+                let noteData = {
+                    note : data.note,
+                    TodoId : retVal.dataValues.id
+                }
+                notes.create(noteData).then(() => res.send(""));
+            }
+            else{
+                res.send("");
+            }
+        });
 })
 

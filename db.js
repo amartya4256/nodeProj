@@ -27,7 +27,8 @@ const Todos = db.define('Todos', {
     },
 
     title : {
-        type : sequelize.STRING(50) 
+        type : sequelize.STRING(50),
+        allowNull: false
     },
 
     description : {
@@ -35,7 +36,8 @@ const Todos = db.define('Todos', {
     },
 
     due : {
-        type : sequelize.DATEONLY
+        type : sequelize.DATEONLY,
+        allowNull: false
     },
 
     status : {
@@ -46,12 +48,14 @@ const Todos = db.define('Todos', {
     priority : {
         type : sequelize.ENUM,
         values : ['high', 'medium', 'low'],
-        defaultValue : true
+        defaultValue : true,
+        allowNull: false
     }
 
 });
 
 Todos.hasMany(notes);
+notes.belongsTo(Todos);
 
 module.exports = {
     db, Todos, notes

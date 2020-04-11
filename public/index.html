@@ -10,17 +10,27 @@
 <body onload = "getData()">
     <h1 align = "center">Todo list manager</h1>
 
-    <label>Task : </label>
-    <input type = "text" id = "task">
-    <label>Done : </label>
-    <select id="done">
-        <option value="true">YES</option>
-        <option value="false">NO</option>
-    </select>
-    <label>Due : </label>
+    <label>Title<span style = "color : red">*</span> : </label>
+    <input type = "text" id = "title">
+    <label>Description : </label>
+    <input type = "text" id = "description">
+    <br/>
+    <label>Due :<span style = "color : red">*</span> </label>
     <input type = "date" id = "due">
+    <label>Priority:<span style = "color : red">*</span> </label>
+    <select id="priority">
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+        <option value="low">Low</option>
+    </select>
+    <br/>
+    <label>Note : </label>
+    <input type = "text" id = "note" style="width : 70%">
     <input type="button" value = "Add Task" id = "btn">
-
+    
+    <p id = 'err'></p>
+    <br/>
+    
     <table id = "table"><table>
 </body>
 </html>

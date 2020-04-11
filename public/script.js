@@ -5,30 +5,53 @@ async function getData(){
 }
 
 const table = document.querySelector("#table");
-const task = document.querySelector("#task");
-const done = document.querySelector("#done");
+const title = document.querySelector("#title");
+const description = document.querySelector("#description");
 const due = document.querySelector('#due');
+// const status = document.querySelector('#status');
+const priority = document.querySelector('#priority');
+const note = document.querySelector('#note');
 const submit = document.querySelector("#btn");
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+due.defaultValue = tomorrow.toJSON().substring(0,10);
 
 function addToTable(data){
     table.innerHTML = "";
     let row = newElement('tr', null);
     table.appendChild(row);
     row.appendChild(newElement('th', 'Index'));
-    row.appendChild(newElement('th', 'Task'));
-    row.appendChild(newElement('th', 'Done'));
+    row.appendChild(newElement('th', 'Title'));
+    row.appendChild(newElement('th', 'Description'));
     row.appendChild(newElement('th', 'Due Date'));
+    row.appendChild(newElement('th', 'Status'));
+    row.appendChild(newElement('th', 'Priority'));
 
     console.log(data);
-
-    for(item of data){
+    if(data.length == 0){
         let row = newElement('tr', null);
         table.appendChild(row);
-        row.appendChild(newElement('td', item.id));
-        row.appendChild(newElement('td', item.task));
-        row.appendChild(newElement('td', item.done));
-        row.appendChild(newElement('td', item.due));
+        let data = newElement('td', 'No data to display');
+        row.appendChild(data);
+        data.colSpan = "6";
+        data.style.textAlign = "center";
+        data.style.color = "gray";
     }
+    else{
+        for(item of data){
+            let row = newElement('tr', null);
+            table.appendChild(row);
+            row.appendChild(newElement('td', item.id));
+            row.appendChild(newElement('td', item.title));
+            row.appendChild(newElement('td', item.description));
+            row.appendChild(newElement('td', item.due));
+            row.appendChild(newElement('td', item.status));
+            row.appendChild(newElement('td', item.priority));
+        }
+    }
+    
 }
 
 function newElement(type, data){
@@ -41,11 +64,17 @@ function newElement(type, data){
 
 async function addTask(){
     let data = {
-        task : task.value,
-        done : done.options[done.selectedIndex].value,
-        due : due.value
+        title : title.value,
+        description : description.value,
+        status : false,
+        priority : priority.options[priority.selectedIndex].value,
+        due : due.value,
+        note : note.value
     };
-    if(data.task != "" && data.due != ""){
+
+    console.log(data);
+
+    if(data.title != "" && data.due != "" && data.priority != ""){
         let res = await fetch("http://localhost:8080/todo",
         {
             method : 'POST',
@@ -55,8 +84,10 @@ async function addTask(){
             body: JSON.stringify(data)
             });
         let respData = res.body;
-        task.value = "";
-        due.value = "";
+        title.value = "";
+        description.value = "";
+        due.value = tomorrow.toJSON().substring(0,10);
+        note.value = "";
         getData();
         }
     

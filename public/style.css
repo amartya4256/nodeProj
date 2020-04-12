@@ -42,7 +42,6 @@
   }
 
   input[type=button], button {
-    width: 10%;
     background-color: rgb(36, 36, 141);
     color: white;
     padding: 5px 10px;

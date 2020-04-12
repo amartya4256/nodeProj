@@ -54,7 +54,11 @@ function addToTable(data){
             row.appendChild(newElement('td', item.title));
             row.appendChild(newElement('td', item.description));
             row.appendChild(newElement('td', item.due));
-            row.appendChild(newElement('td', item.status));
+            var statusVal = "Incomplete";
+            if(item.status == true){
+                statusVal = "Complete";
+            }
+            row.appendChild(newElement('td', statusVal));
             row.appendChild(newElement('td', item.priority));
             let rowNote = newElement('tr', null);
 
@@ -235,7 +239,7 @@ function getEditPortal(id){
         document.querySelector("#editDescription").value = data.description;
         document.querySelector("#editDue").value = data.due;
         document.querySelector("#editPriority").value = data.priority;
-        document.querySelector("#editStatus").value = data.status;
+        document.querySelector("#editStatuss").checked = data.status;
         document.querySelector("#saveBtn").onclick = function(){
             saveChanges(id);
         }
@@ -246,7 +250,7 @@ async function saveChanges(id){
     let data = {
         due : document.querySelector("#editDue").value,
         priority : document.querySelector("#editPriority").value,
-        status : document.querySelector("#editStatus").value
+        status : document.querySelector("#editStatuss").checked
     }
     console.log(data);
     let res = await fetch("/todo/" + id,

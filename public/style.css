@@ -80,22 +80,29 @@
   .modal-content {
     background-color: #fefefe;
     margin: auto;
-    padding: 20px;
+
     border: 1px solid #888;
     width: 80%;
   }
   
   /* The Close Button */
   .close {
-    color: #aaaaaa;
+    color: white;
     float: right;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: bolder;
+    padding: 10px;
+    padding-right: 15px;
   }
   
   .close:hover,
   .close:focus {
-    color: #000;
+    color: grey;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .editHeader{
+    height : 50px;
+    background-color: rgb(36, 36, 141);
   }

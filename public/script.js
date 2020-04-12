@@ -103,6 +103,7 @@ async function addTask(){
         title.value = "";
         description.value = "";
         due.value = tomorrow.toJSON().substring(0,10);
+        priority.value = 'medium';
         note.value = "";
         getData();
         }

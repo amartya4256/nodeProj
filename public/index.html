@@ -47,5 +47,34 @@
     <br/>
     
     <table id = "table"><table>
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <label>Title<span style = "color : red">*</span> : </label>
+            <input type = "text" id = "editTitle" style = "color : gray" readonly>
+            <label>Description : </label>
+            <input type = "text" id = "editDescription" style = "color : gray" readonly>
+            <br/>
+            <label>Due :<span style = "color : red">*</span> </label>
+            <input type = "Date" id = "editDue">
+            <label>Priority:<span style = "color : red">*</span> </label>
+            <select id="editPriority">
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+            </select>
+            <label>Status:<span style = "color : red">*</span> </label>
+            <select id="editStatus">
+                <option value=true>Complete</option>
+                <option value=false>Incomplete</option>
+            </select>
+            <input type="button" value = "Save" id = "saveBtn">
+        </div>
+          
+    </div>
 </body>
 </html>

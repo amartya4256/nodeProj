@@ -1,4 +1,4 @@
-const url = "todo4256.herokuapp.com";
+const url = "localhost:5000";
 
 async function getData(){
     let res = await fetch("/todo");
@@ -15,11 +15,14 @@ const priority = document.querySelector('#priority');
 const note = document.querySelector('#note');
 const submit = document.querySelector("#btn");
 const sortBy = document.querySelector("#sort");
+const modal = document.getElementById("myModal");
 
 const today = new Date();
+console.log(today);
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 due.defaultValue = tomorrow.toJSON().substring(0,10);
+console.log(tomorrow.toJSON().substring(0,10), tomorrow);
 
 function addToTable(data){
     table.innerHTML = "";
@@ -112,15 +115,18 @@ async function getNotes(id, rowData){
     xhr.onreadystatechange = function(){
         if (xhr.readyState === 4 && xhr.status == 200) {
             let data = JSON.parse(this.responseText);
-            formattedData = '';
+            let list = newElement('ul', null);
+            
             for(let note of data){
-                formattedData += note.note + `<br/>`;
+                list.appendChild(newElement('li', note.note));
             }
-            rowData.innerHTML = formattedData;
+            rowData.appendChild(list);
             let input = newElement('input', null);
             let btn = newElement('input', null);
+            let edit = newElement('button', 'Edit');
             rowData.appendChild(input);
             rowData.appendChild(btn);
+            rowData.appendChild(edit);
             input.type = 'text';
             btn.type = 'button';
             btn.value = 'Add Note';
@@ -128,6 +134,10 @@ async function getNotes(id, rowData){
                 addNote(input, id);
             }
             input.id = id + "_input";
+            edit.className = 'editButton';
+            edit.onclick = function(){
+                getEditPortal(id);
+            }
           }
     }
     xhr.open("GET", "/todo/" + id + "/notes");
@@ -217,7 +227,45 @@ function sortByStatus(data){
       return data;
 }
 
+function getEditPortal(id){
+    modal.style.display = "block";
+    fetch("/todo/" + id).then((data) => data.json().then((data) => {
+        document.querySelector("#editTitle").value = data.title;
+        document.querySelector("#editDescription").value = data.description;
+        document.querySelector("#editDue").value = data.due;
+        document.querySelector("#editPriority").value = data.priority;
+        document.querySelector("#editStatus").value = data.status;
+        document.querySelector("#saveBtn").onclick = function(){
+            saveChanges(id);
+        }
+    }));
+}
+
+async function saveChanges(id){
+    let data = {
+        due : document.querySelector("#editDue").value,
+        priority : document.querySelector("#editPriority").value,
+        status : document.querySelector("#editStatus").value
+    }
+    console.log(data);
+    let res = await fetch("/todo/" + id,
+        {
+            method : 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    modal.style.display = "none";
+    getData();
+}
+
+
 submit.onclick = addTask;
 
 sortBy.onchange = getData;
 
+document.getElementsByClassName("close")[0].onclick = function() {
+    modal.style.display = "none";
+    document.querySelector("#saveBtn").onclick = null;
+  }

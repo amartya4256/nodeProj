@@ -22,14 +22,22 @@ db.sync().then(
 
 
 app.get('/todo/:id', (req, res) => {
-    console.log(req.params);
+    var id = req.params.id;
     if(isNaN(parseInt(req.params.id))){
         req.status(404).send({
             error : 'invalid todo id'
         });
         return;
     }
-    res.send();
+    Todos.findOne({
+        attributes : ['id', 'title', 'description', 'due', 'status', 'priority'],
+        where : {
+            'id' : id
+        }
+    }).then((data) => {
+        res.send(data);
+    });
+    
 });
 
 app.get('/todo', (req, res) => {
@@ -83,3 +91,19 @@ app.post('/todo/:id/notes', (req, res) => {
         res.send({error : 'Invalid Id'});
     });
 });
+
+app.patch('/todo/:id', (req, res) => {
+    let Taskid = req.params.id;
+    let data = req.body;
+    Todos.findOne({
+            where : {
+                id : Taskid
+            }
+        }
+    ).then((todo) => {
+            todo.due = data.due;
+            todo.priority = data.priority;
+            todo.status = data.status;
+            todo.save().then(() => res.send(""));
+    })
+})

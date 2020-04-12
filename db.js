@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 
 const db = new sequelize({
     dialect : 'sqlite',
-    storage : __dirname + '/test.db'
+    storage : __dirname + '/todos.db'
 });
 
 console.log(__dirname);
